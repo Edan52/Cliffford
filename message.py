@@ -7,16 +7,14 @@ class Message(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        print('test')
         mention = f'<@!{self.bot.user.id}>'
         if mention in message.content:
-            await message.channel.send("Bro")
+            await message.channel.send("Hello.")
             
     @commands.command()
     async def blacklist(self, ctx, arg=None):
         for x in __main__.blacklist:
             if x[0] == ctx.guild.id and x[1] == ctx.author.id:
-                print('BANNED!')
                 return False
         if not arg:
             return False

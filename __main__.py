@@ -32,8 +32,6 @@ with DatabaseConnection() as dbinstance:
 
 #Initializing the bot
 bot = commands.Bot(command_prefix=config['bot_command'])
-print(str(config['bot_command']))
-print('£')
 
 @bot.event
 async def on_ready():
