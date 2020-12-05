@@ -15,15 +15,23 @@ class Message(commands.Cog):
     async def blacklist(self, ctx, arg=None):
         for x in __main__.blacklist:
             if x[0] == ctx.guild.id and x[1] == ctx.author.id:
+                await ctx.send("<@"+str(ctx.author.id)+">, you are blacklisted from using the bot.")
                 return False
-        if not arg:
-            return False
-        elif len(arg) == 18:
-            with __main__.DatabaseConnection() as dbinstance:
-                dbcursor = dbinstance.cursor()
-                dbcursor.execute('INSERT INTO Blacklist (userID, serverID) VALUES (?, ?)', (arg, ctx.guild.id))
-                dbinstance.commit()
+        if ctx.message.author.guild_permissions.administrator:
+            if not arg:
+                await ctx.send("<@"+str(ctx.author.id)+">, please specify arguments.")
+                return False
+            elif len(arg) == 18:
+                with __main__.DatabaseConnection() as dbinstance:
+                    dbcursor = dbinstance.cursor()
+                    dbcursor.execute('INSERT INTO Blacklist (userID, serverID) VALUES (?, ?)', (arg, ctx.guild.id))
+                    dbinstance.commit()
+                    return True
+            else:
+                await ctx.send("<@"+str(ctx.author.id)+">, please provide a discord ID.")
+                return False
         else:
+            await ctx.send("<@"+str(ctx.author.id)+">, you do not have permission to use this command.")
             return False
 
 def setup(bot):

@@ -1,6 +1,5 @@
-import discord, json, asyncio, sqlite3
+import discord, json, asyncio, sqlite3, os.path
 from discord.ext import commands
-import os.path
 
 #Load config
 with open("config.json", "r", encoding='utf-8') as json_file:
