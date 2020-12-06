@@ -23,10 +23,15 @@ class Message(commands.Cog):
                 return False
             elif len(arg) == 18:
                 with __main__.DatabaseConnection() as dbinstance:
-                    dbcursor = dbinstance.cursor()
-                    dbcursor.execute('INSERT INTO Blacklist (userID, serverID) VALUES (?, ?)', (arg, ctx.guild.id))
-                    dbinstance.commit()
-                    return True
+                    try:
+                        dbcursor = dbinstance.cursor()
+                        dbcursor.execute('INSERT INTO Blacklist (userID, serverID) VALUES (?, ?)', (arg, ctx.guild.id))
+                        dbinstance.commit()
+                        __main__.blacklist.append([int(arg), ctx.guild.id])
+                        print(__main__.blacklist)
+                        return True
+                    except Exception:
+                        await ctx.send("<@"+str(ctx.author.id)+">, please provide a discord ID.")
             else:
                 await ctx.send("<@"+str(ctx.author.id)+">, please provide a discord ID.")
                 return False
