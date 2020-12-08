@@ -43,4 +43,6 @@ async def on_ready():
 
 #Load extensions here
 bot.load_extension('message')
+if config['spotify_enabled']: #Enable in config
+    bot.load_extension('spotify')
 bot.run(config['bot_token'])
