@@ -5,7 +5,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 class Spotify(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(__main__.config['spotify_client_id'], client_secret=__main__.config['spotify_client_secret']))
+        self.spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id = __main__.config['spotify_client_id'], client_secret=__main__.config['spotify_client_secret']))
 
     @commands.command()
     async def artist(self, ctx, arg=None):
@@ -18,7 +18,17 @@ class Spotify(commands.Cog):
         items = results['artists']['items']
         if len(items) > 0:
             artist = items[0]
-            await ctx.send(artist['images'][0]['url'])
+            content = discord.Embed(
+                color = 0x00FF00,
+            )
+            content.set_thumbnail(url = artist['images'][2]['url'])
+            content.add_field(name = "Followers", value = artist['followers']['total'], inline = False)
+            content.add_field(name = "Genre", value = artist['genres'][0], inline = False)
+            content.add_field(name = "Popularity", value = artist['popularity'], inline = False)
+            content.add_field(name = "Spotify URL", value = "[Click Here](" + artist['external_urls']['spotify'] + ")", inline = False)
+            content.set_footer(text = "<"+artist['external_urls']['spotify']+">")
+            content.set_author(name = artist['name'], icon_url = "https://cdn.discordapp.com/attachments/784835961137004599/786580481855455242/unknown.png")
+            await ctx.send(embed=content)
 
 def setup(bot):
     bot.add_cog(Spotify(bot))
